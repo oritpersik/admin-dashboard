@@ -54,6 +54,28 @@ angular
                     }
                 }
             })
+            .state('dashboard.users', {
+                url: '/users',
+                controller: 'UsersCtrl',
+                controllerAs: 'vmus',
+                templateUrl: 'sb-admin/views/dashboard/users.html',
+                resolve: {
+                    loggedin: function(MeanUser) {
+                        return MeanUser.checkLoggedin();
+                    }
+                }
+            })
+            .state('dashboard.user apps', {
+                url: '/user/:uid',
+                controller: 'UserCtrl',
+                controllerAs: 'vmu',
+                templateUrl: 'sb-admin/views/dashboard/user-apps.html',
+                resolve: {
+                    loggedin: function(MeanUser) {
+                        return MeanUser.checkLoggedin();
+                    }
+                }
+            })
             .state('dashboard.form', {
                 templateUrl: 'sb-admin/views/form.html',
                 url: '/form',

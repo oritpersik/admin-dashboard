@@ -8,22 +8,25 @@ var mongoose = require('mongoose'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     LinkedinStrategy = require('passport-linkedin').Strategy,
     User = mongoose.model('User'),
-    config = require('meanio').loadConfig();
+    config = require('meanio').loadConfig(),
+    request = require('request');
 
 module.exports = function(passport) {
     // Serialize the user id to push into the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     // Deserialize the user object based on a pre-serialized token
     // which is the user id
-    passport.deserializeUser(function(id, done) {
-        User.findOne({
-            _id: id
-        }, '-salt -hashed_password', function(err, user) {
-            done(err, user);
-        });
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+        // User.findOne({
+        //     _id: user._id
+        // }).exec(function(err, user1) {
+        //     done(err, user1);
+
+        // });
     });
 
     // Use local strategy
@@ -32,30 +35,28 @@ module.exports = function(passport) {
             passwordField: 'password'
         },
         function(email, password, done) {
-            User.findOne({
-                email: email
-            }, function(err, user) {
-                if (err) {
-                    return done(err);
+            var options = {
+                uri: config.stsApi.uri + '/user/login',
+                form: {
+                    'email': email,
+                    'password': password
                 }
-                if (!user) {
+            };
+            request.post(options, function(error, response, body) {
+                if (!error && (response.statusCode === 200 || response.statusCode === 201)) {
+                    body = JSON.parse(body);
+                    if (body.roles.indexOf('admin') === -1) return done(null, false, {
+                        message: 'Permission denied'
+                    });
+                    done(null, body);
+                } else {
+                    console.log('login error', error);
                     return done(null, false, {
                         message: 'Unknown user'
                     });
                 }
-                if (!user.authenticate(password)) {
-                    return done(null, false, {
-                        message: 'Invalid password'
-                    });
-                }
-                if (user.roles.indexOf('admin') === -1)
-                    return done(null, false, {
-                        message: 'Permission denied'
-                    });
-                return done(null, user);
             });
-        }
-    ));
+        }));
 
     // Use twitter strategy
     passport.use(new TwitterStrategy({

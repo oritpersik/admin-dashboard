@@ -7,10 +7,12 @@
  * # adminPosHeader
  */
 angular.module('sbAdminApp')
-    .directive('header', function() {
-        return {
-            templateUrl: 'sb-admin/directives/header/header.html',
-            restrict: 'E',
-            replace: true
-        }
-    });
+	.directive('header',function(){
+		return {
+        templateUrl:'sb-admin/directives/header/header.html',
+        restrict: 'E',
+        replace: true,
+    	}
+	});
+
+

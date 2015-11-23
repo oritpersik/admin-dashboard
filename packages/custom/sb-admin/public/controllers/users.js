@@ -8,25 +8,21 @@
  */
 
 angular.module('mean.sb-admin')
-    .controller('MainCtrl', ['$scope', '$uibPosition', '$state', 'Sapi',
-        function($scope, $uibPosition, $state, Sapi) {
+    .controller('UsersCtrl', ['$scope', '$state', 'Sapi',
+        function($scope, $state, Sapi) {
 
-            var vm = this;
+            var vmus = this;
 
-            vm.init = function() {
+            vmus.find = function() {
                 Sapi.get({
-                    cmd_api: '/counts',
+                    cmd_api: '/users',
                     admin: true
                 }).then(function(data) {
-                    vm.entitiesCount = data;
+                    vmus.users = data;
+                    console.log(data, 'users');
                 }, function(error) {
                     console.log(error);
                 });
             };
-
-            vm.moveToState = function(name) {
-                $state.go(name);
-            };
-
         }
     ]);
