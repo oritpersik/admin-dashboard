@@ -16,7 +16,7 @@ Articles.register(function(app, auth, database, circles, swagger) {
   //We enable routing. By default the Package Object is passed to the routes
   Articles.routes(app, auth, database);
 
-  Articles.aggregateAsset('css', 'articles.css');
+  // Articles.aggregateAsset('css', 'articles.css');
 
   
   //We are adding a link to the main menu for all authenticated users
