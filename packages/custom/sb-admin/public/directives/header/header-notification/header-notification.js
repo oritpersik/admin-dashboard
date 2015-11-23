@@ -15,7 +15,6 @@ angular.module('sbAdminApp')
             link: function(scope, elem, attrs) {
                 scope.logout = function() {
                     MeanUser.logout();
-                    $state.go('login');
                 };
             }
         }
