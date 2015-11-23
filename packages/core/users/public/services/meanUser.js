@@ -141,7 +141,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
 
       $http.get('/api/logout').success(function(data) {
         localStorage.removeItem('JWT');
-        $rootScope.$emit('logout');
+        $location.url('/login');
       });
     };
 
