@@ -43,7 +43,9 @@ angular.module('mean.users')
       });
 
       // Register the login() function
-      vm.login = function() {
+      vm.login = function(valid) {
+        if (!valid) return;
+        
         MeanUser.login(this.user);
       };
     }

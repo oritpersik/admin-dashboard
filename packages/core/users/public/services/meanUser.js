@@ -157,7 +157,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         else {
           $cookies.put('redirect', $location.path());
           $timeout(deferred.reject);
-          $location.url('/auth/login');
+          $location.url('/login');
         }
       });
 
